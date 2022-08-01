@@ -26,7 +26,7 @@
 #define	CROWBAR_BODYHIT_VOLUME 128
 #define	CROWBAR_WALLHIT_VOLUME 512
 
-class CCrowbar : public CBasePlayerWeapon
+class CFist : public CBasePlayerWeapon
 {
 public:
 	void Spawn( void );
@@ -43,7 +43,7 @@ public:
 	int m_iSwing;
 	TraceResult m_trHit;
 };
-LINK_ENTITY_TO_CLASS( weapon_crowbar, CCrowbar );
+LINK_ENTITY_TO_CLASS( weapon_fist, CFist );
 
 
 
@@ -60,10 +60,10 @@ enum gauss_e {
 };
 
 
-void CCrowbar::Spawn( )
+void CFist::Spawn( )
 {
 	Precache( );
-	m_iId = WEAPON_CROWBAR;
+	m_iId = WEAPON_FIST;
 	SET_MODEL(ENT(pev), "models/w_crowbar.mdl");
 	m_iClip = -1;
 
@@ -71,9 +71,9 @@ void CCrowbar::Spawn( )
 }
 
 
-void CCrowbar::Precache( void )
+void CFist::Precache( void )
 {
-	PRECACHE_MODEL("models/v_crowbar.mdl");
+	PRECACHE_MODEL("models/v_fist.mdl");
 	PRECACHE_MODEL("models/w_crowbar.mdl");
 	PRECACHE_MODEL("models/p_crowbar.mdl");
 	PRECACHE_SOUND("weapons/cbar_hit1.wav");
@@ -84,7 +84,7 @@ void CCrowbar::Precache( void )
 	PRECACHE_SOUND("weapons/cbar_miss1.wav");
 }
 
-int CCrowbar::GetItemInfo(ItemInfo *p)
+int CFist::GetItemInfo(ItemInfo *p)
 {
 	p->pszName = STRING(pev->classname);
 	p->pszAmmo1 = NULL;
@@ -93,27 +93,27 @@ int CCrowbar::GetItemInfo(ItemInfo *p)
 	p->iMaxAmmo2 = -1;
 	p->iMaxClip = WEAPON_NOCLIP;
 	p->iSlot = 0;
-	p->iPosition = 0;
-	p->iId = WEAPON_CROWBAR;
+	p->iPosition = 1;
+	p->iId = WEAPON_FIST;
 	p->iWeight = CROWBAR_WEIGHT;
 	return 1;
 }
 
 
 
-BOOL CCrowbar::Deploy( )
+BOOL CFist::Deploy( )
 {
-	return DefaultDeploy( "models/v_crowbar.mdl", "models/p_crowbar.mdl", CROWBAR_DRAW, "crowbar" );
+	return DefaultDeploy("models/v_fist.mdl", "models/p_crowbar.mdl", CROWBAR_DRAW, "crowbar" );
 }
 
-void CCrowbar::Holster( )
+void CFist::Holster( )
 {
 	m_pPlayer->m_flNextAttack = gpGlobals->time + 0.5;
 	SendWeaponAnim( CROWBAR_HOLSTER );
 }
 
 
-void FindHullIntersection( const Vector &vecSrc, TraceResult &tr, float *mins, float *maxs, edict_t *pEntity )
+void FindHullIntersection2( const Vector &vecSrc, TraceResult &tr, float *mins, float *maxs, edict_t *pEntity )
 {
 	int			i, j, k;
 	float		distance;
@@ -158,29 +158,29 @@ void FindHullIntersection( const Vector &vecSrc, TraceResult &tr, float *mins, f
 }
 
 
-void CCrowbar::PrimaryAttack()
+void CFist::PrimaryAttack()
 {
 	if (! Swing( 1 ))
 	{
-		SetThink(&CCrowbar::SwingAgain );
+		SetThink(&CFist::SwingAgain );
 		pev->nextthink = gpGlobals->time + 0.1;
 	}
 }
 
 
-void CCrowbar::Smack( )
+void CFist::Smack( )
 {
 	DecalGunshot( &m_trHit, BULLET_PLAYER_CROWBAR );
 }
 
 
-void CCrowbar::SwingAgain( void )
+void CFist::SwingAgain( void )
 {
 	Swing( 0 );
 }
 
 
-int CCrowbar::Swing( int fFirst )
+int CFist::Swing( int fFirst )
 {
 	int fDidHit = FALSE;
 
@@ -201,7 +201,7 @@ int CCrowbar::Swing( int fFirst )
 			// This is and approximation of the "best" intersection
 			CBaseEntity *pHit = CBaseEntity::Instance( tr.pHit );
 			if ( !pHit || pHit->IsBSPModel() )
-				FindHullIntersection( vecSrc, tr, VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX, m_pPlayer->edict() );
+				FindHullIntersection2( vecSrc, tr, VEC_DUCK_HULL_MIN, VEC_DUCK_HULL_MAX, m_pPlayer->edict() );
 			vecEnd = tr.vecEndPos;	// This is the point on the actual surface (the hull could have hit space)
 		}
 	}
@@ -252,20 +252,13 @@ int CCrowbar::Swing( int fFirst )
 		if ( (m_flNextPrimaryAttack + 1 < gpGlobals->time) || g_pGameRules->IsMultiplayer() )
 		{
 			// first swing does full damage
-			pEntity->TraceAttack(m_pPlayer->pev, gSkillData.plrDmgCrowbar * 2, gpGlobals->v_forward, &tr, DMG_CLUB ); 
+			pEntity->TraceAttack(m_pPlayer->pev, gSkillData.plrDmgCrowbar, gpGlobals->v_forward, &tr, DMG_CLUB ); 
 		}
 		else
 		{
 			// subsequent swings do half
-			pEntity->TraceAttack(m_pPlayer->pev, gSkillData.plrDmgCrowbar, gpGlobals->v_forward, &tr, DMG_CLUB ); 
-		}
-
-		for (int i = 0; i < 10; i++)
-		{
-			UTIL_BloodStream(pEntity->pev->origin + Vector(0, 0, (pEntity->pev->maxs.z - pEntity->pev->mins.z) / 2), Vector(RANDOM_FLOAT(-1, 1), RANDOM_FLOAT(-1, 1), RANDOM_FLOAT(-1, 1)), 70, 10);
-			UTIL_BloodDrips(pEntity->pev->origin + Vector(0, 0, (pEntity->pev->maxs.z - pEntity->pev->mins.z) / 2), Vector(RANDOM_FLOAT(-1, 1), RANDOM_FLOAT(-1, 1), RANDOM_FLOAT(-1, 1)), 70, 10);
-		}
-
+			pEntity->TraceAttack(m_pPlayer->pev, gSkillData.plrDmgCrowbar / 2, gpGlobals->v_forward, &tr, DMG_CLUB ); 
+		}	
 		ApplyMultiDamage( m_pPlayer->pev, m_pPlayer->pev );
 
 		m_flNextPrimaryAttack = gpGlobals->time + 0.25;
@@ -329,7 +322,7 @@ int CCrowbar::Swing( int fFirst )
 
 		// delay the decal a bit
 		m_trHit = tr;
-		SetThink( &CCrowbar::Smack );
+		SetThink( &CFist::Smack );
 		pev->nextthink = gpGlobals->time + 0.2;
 
 		m_pPlayer->m_iWeaponVolume = flVol * CROWBAR_WALLHIT_VOLUME;

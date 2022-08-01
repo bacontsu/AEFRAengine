@@ -172,6 +172,7 @@
     <ClCompile Include="egon.cpp" />
     <ClCompile Include="env_model.cpp" />
     <ClCompile Include="explode.cpp" />
+    <ClCompile Include="fist.cpp" />
     <ClCompile Include="flyingmonster.cpp" />
     <ClCompile Include="func_break.cpp" />
     <ClCompile Include="func_tank.cpp" />

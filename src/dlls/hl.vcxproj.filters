@@ -339,6 +339,9 @@
     <ClCompile Include="light_model.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fist.cpp">
+      <Filter>Source Files\Weapons</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="activitymap.h">
