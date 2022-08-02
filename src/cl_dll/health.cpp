@@ -27,12 +27,18 @@
 #include "parsemsg.h"
 #include <string.h>
 
+#include "r_studioint.h"
+#include "com_model.h"
+
 
 DECLARE_MESSAGE(m_Health, Health )
 DECLARE_MESSAGE(m_Health, Damage )
 
 #define PAIN_NAME "sprites/%d_pain.spr"
 #define DAMAGE_NAME "sprites/%d_dmg.spr"
+
+#define HEALTH_SPRITE "sprites/healthlogo.spr"
+#define HEALTH_COLOR Vector( 243, 24, 24)
 
 int giDmgHeight, giDmgWidth;
 
@@ -94,6 +100,10 @@ int CHudHealth::VidInit(void)
 
 	giDmgHeight = gHUD.GetSpriteRect(m_HUD_dmg_bio).right - gHUD.GetSpriteRect(m_HUD_dmg_bio).left;
 	giDmgWidth = gHUD.GetSpriteRect(m_HUD_dmg_bio).bottom - gHUD.GetSpriteRect(m_HUD_dmg_bio).top;
+
+	// reset when level change
+	nextBeatUpdate = 0;
+	nextBeatFrame = 0;
 	return 1;
 }
 
@@ -167,6 +177,36 @@ void CHudHealth::GetPainColor( int &r, int &g, int &b )
 #endif 
 }
 
+void DrawFrame(float xmin, float ymin, float xmax, float ymax, char* sprite, Vector color, int mode, int frame)
+{
+	//setup
+	gEngfuncs.pTriAPI->RenderMode(mode);
+	gEngfuncs.pTriAPI->Brightness(1.0f);
+	gEngfuncs.pTriAPI->Color4ub(color.x, color.y, color.z, 255);
+	gEngfuncs.pTriAPI->CullFace(TRI_NONE);
+	gEngfuncs.pTriAPI->SpriteTexture((struct model_s*)gEngfuncs.GetSpritePointer(SPR_Load(sprite)), frame);
+
+	//start drawing
+	gEngfuncs.pTriAPI->Begin(TRI_QUADS);
+
+	//top left
+	gEngfuncs.pTriAPI->TexCoord2f(0, 0);
+	gEngfuncs.pTriAPI->Vertex3f(xmin, ymin, 0);
+	//bottom left
+	gEngfuncs.pTriAPI->TexCoord2f(0, 1);
+	gEngfuncs.pTriAPI->Vertex3f(xmin, ymax, 0);
+	//bottom right
+	gEngfuncs.pTriAPI->TexCoord2f(1, 1);
+	gEngfuncs.pTriAPI->Vertex3f(xmax, ymax, 0);
+	//top right
+	gEngfuncs.pTriAPI->TexCoord2f(1, 0);
+	gEngfuncs.pTriAPI->Vertex3f(xmax, ymin, 0);
+
+	//end
+	gEngfuncs.pTriAPI->End();
+	gEngfuncs.pTriAPI->RenderMode(kRenderNormal);
+}
+
 int CHudHealth::Draw(float flTime)
 {
 	int r, g, b;
@@ -204,27 +244,64 @@ int CHudHealth::Draw(float flTime)
 	GetPainColor( r, g, b );
 	ScaleColors(r, g, b, a );
 
+	// find heartbeat speed
+	if (m_iHealth > 70)
+	{
+		animSpeed = 0.05f;
+	}
+	else if (m_iHealth <= 70 && m_iHealth > 15)
+	{
+		animSpeed = 0.08f;
+	}
+	else
+	{
+		animSpeed = 0.15f;
+	}
+
+	// beating heart logic
+	if (nextBeatUpdate < gHUD.m_flTime)
+	{
+		beatSequence++;
+		if (beatSequence < 5)
+		{
+			heartScaler = beatSequence;
+		}
+		else if (beatSequence >= 5 && beatSequence < 10)
+		{
+			heartScaler = 10 - beatSequence;
+		}
+		else if (beatSequence == 10)
+		{
+			beatSequence = 0;
+		}
+
+		nextBeatUpdate = gHUD.m_flTime + animSpeed;
+	}
+
+	// cardio line thing
+	if (nextBeatFrame < gHUD.m_flTime)
+	{
+		beatFrame++;
+		if (beatFrame >= 24) beatFrame = 0;
+
+		nextBeatFrame = gHUD.m_flTime + 0.05f;
+	}
+
 	// Only draw health if we have the suit.
 	if (gHUD.m_iWeaponBits & (1<<(WEAPON_SUIT)))
 	{
-		HealthWidth = gHUD.GetSpriteRect(gHUD.m_HUD_number_0).right - gHUD.GetSpriteRect(gHUD.m_HUD_number_0).left;
-		int CrossWidth = gHUD.GetSpriteRect(m_HUD_cross).right - gHUD.GetSpriteRect(m_HUD_cross).left;
+		// draw beating backround
 
-		y = ScreenHeight - gHUD.m_iFontHeight - gHUD.m_iFontHeight / 2;
-		x = CrossWidth /2;
+		x = 60;
+		y = ScreenHeight - 98 - gHUD.m_iFontHeight - gHUD.m_iFontHeight / 2;
 
-		SPR_Set(gHUD.GetSprite(m_HUD_cross), r, g, b);
-		SPR_DrawAdditive(0, x, y, &gHUD.GetSpriteRect(m_HUD_cross));
+		DrawFrame(x, y, x + 120, y + 120, "sprites/a.spr", Vector(94, 235, 33), kRenderTransAdd, beatFrame);
 
-		x = CrossWidth + HealthWidth / 2;
+		// draw health logo
+		x = 80;
+		y = ScreenHeight - 78 - gHUD.m_iFontHeight - gHUD.m_iFontHeight / 2;
 
-		x = gHUD.DrawHudNumber(x, y, DHN_3DIGITS | DHN_DRAWZERO, m_iHealth, r, g, b);
-
-		x += HealthWidth/2;
-
-		int iHeight = gHUD.m_iFontHeight;
-		int iWidth = HealthWidth/10;
-		FillRGBA(x, y, iWidth, iHeight, 255, 160, 0, a);
+		gHUD.DrawBackground(x - heartScaler*2, y - heartScaler*2, x + 80 + heartScaler*2, y + 80 + heartScaler * 2, HEALTH_SPRITE, HEALTH_COLOR, kRenderTransAdd);
 	}
 
 	DrawDamage(flTime);

@@ -113,6 +113,14 @@ public:
 	float m_fAttackFront, m_fAttackRear, m_fAttackLeft, m_fAttackRight;
 	void GetPainColor( int &r, int &g, int &b );
 	float m_fFade;
+	int heartScaler;
+	int beatSequence;
+	float nextBeatUpdate;
+	float animSpeed;
+
+	int beatFrame;
+	char beatSprite[512];
+	float nextBeatFrame;
 
 private:
 	HLSPRITE m_HLSPRITE;
