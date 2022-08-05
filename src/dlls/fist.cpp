@@ -269,6 +269,15 @@ int CFist::Swing( int fFirst )
 
 		if (pEntity)
 		{
+			// dont apply if its a brush entity
+			if (!pEntity->IsBSPModel())
+			{
+				// apply knockback
+				pEntity->pev->velocity = pEntity->pev->velocity + Vector(pEntity->pev->origin - m_pPlayer->pev->origin).Normalize() * 500;
+				pEntity->pev->velocity.z += 0.1f;
+				UTIL_ScreenShake(m_pPlayer->pev->origin, 5.0, 150.0, 0.75, 250.0);
+			}
+
 			if (pEntity->Classify() != CLASS_NONE && pEntity->Classify() != CLASS_MACHINE)
 			{
 				// play thwack or smack sound
