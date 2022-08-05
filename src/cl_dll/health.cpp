@@ -282,7 +282,34 @@ int CHudHealth::Draw(float flTime)
 	if (nextBeatFrame < gHUD.m_flTime)
 	{
 		beatFrame++;
-		if (beatFrame >= 24) beatFrame = 0;
+
+		int maxFrame;
+		if (m_iHealth > 80) 
+		{
+			maxFrame = 24;
+		}
+		else if (m_iHealth > 60)
+		{
+			maxFrame = 25;
+		}
+		else if (m_iHealth > 40)
+		{
+			maxFrame = 23;
+		}
+		else if (m_iHealth > 20)
+		{
+			maxFrame = 23;
+		}
+		else if (m_iHealth > 0)
+		{
+			maxFrame = 25;
+		}
+		else
+		{
+			maxFrame = 12;
+		}
+
+		if (beatFrame >= maxFrame) beatFrame = 0;
 
 		nextBeatFrame = gHUD.m_flTime + 0.05f;
 	}
@@ -295,13 +322,45 @@ int CHudHealth::Draw(float flTime)
 		x = 60;
 		y = ScreenHeight - 98 - gHUD.m_iFontHeight - gHUD.m_iFontHeight / 2;
 
-		DrawFrame(x, y, x + 120, y + 120, "sprites/a.spr", Vector(94, 235, 33), kRenderTransAdd, beatFrame);
+		if (m_iHealth > 80)
+		{
+			DrawFrame(x, y, x + 120, y + 120, "sprites/a.spr", Vector(94, 235, 33), kRenderTransAdd, beatFrame);
+		}
+		else if (m_iHealth > 60)
+		{
+			DrawFrame(x, y, x + 120, y + 120, "sprites/b.spr", Vector(94, 235, 33), kRenderTransAdd, beatFrame);
+		}
+		else if (m_iHealth > 40)
+		{
+			DrawFrame(x, y, x + 120, y + 120, "sprites/c.spr", Vector(94, 235, 33), kRenderTransAdd, beatFrame);
+		}
+		else if (m_iHealth > 20)
+		{
+			DrawFrame(x, y, x + 120, y + 120, "sprites/d.spr", Vector(94, 235, 33), kRenderTransAdd, beatFrame);
+		}
+		else if (m_iHealth > 0)
+		{
+			DrawFrame(x, y, x + 120, y + 120, "sprites/e.spr", Vector(94, 235, 33), kRenderTransAdd, beatFrame);
+		}
+		else
+		{
+			DrawFrame(x, y, x + 120, y + 120, "sprites/f.spr", Vector(94, 235, 33), kRenderTransAdd, beatFrame);
+		}
 
 		// draw health logo
 		x = 80;
 		y = ScreenHeight - 78 - gHUD.m_iFontHeight - gHUD.m_iFontHeight / 2;
 
-		gHUD.DrawBackground(x - heartScaler*2, y - heartScaler*2, x + 80 + heartScaler*2, y + 80 + heartScaler * 2, HEALTH_SPRITE, HEALTH_COLOR, kRenderTransAdd);
+		Vector color;
+		
+		if (m_iHealth > 66)
+			color = Vector(69, 238, 13);
+		else if (m_iHealth > 33)
+			color = Vector(235, 240, 11);
+		else
+			color = HEALTH_COLOR;
+
+		gHUD.DrawBackground(x - heartScaler*2, y - heartScaler*2, x + 80 + heartScaler*2, y + 80 + heartScaler * 2, HEALTH_SPRITE, color, kRenderTransAdd);
 	}
 
 	DrawDamage(flTime);
