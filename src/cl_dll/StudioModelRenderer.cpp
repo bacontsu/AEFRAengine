@@ -1100,6 +1100,13 @@ int CStudioModelRenderer::StudioDrawModel( int flags )
 	IEngineStudio.GetViewInfo( m_vRenderOrigin, m_vUp, m_vRight, m_vNormal );
 	IEngineStudio.GetAliasScale( &m_fSoftwareXScale, &m_fSoftwareYScale );
 
+	// bacontsu - wep info
+	if (m_pCurrentEntity == gEngfuncs.GetViewModel())
+	{
+		if(gHUD.curWepID == 2) // glock
+		m_pCurrentEntity->curstate.body = gHUD.curWepClip;
+	}
+
 	if (m_pCurrentEntity->curstate.renderfx == kRenderFxDeadPlayer)
 	{
 		entity_state_t deadplayer;

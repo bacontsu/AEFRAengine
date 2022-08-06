@@ -582,6 +582,11 @@ public:
 	float		mouse_y;
 	float		velz;
 
+	// bacontsu - wep info
+
+	int			curWepID;
+	int			curWepClip;
+
 	int m_iFontHeight;
 	int DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, int b);
 	int DrawHudString(int x, int y, int iMaxX, char* szString, int r, int g, int b);
@@ -647,6 +652,7 @@ public:
 	int _cdecl MsgFunc_SetFOV(const char* pszName, int iSize, void* pbuf);
 	int  _cdecl MsgFunc_Concuss(const char* pszName, int iSize, void* pbuf);
 	int _cdecl MsgFunc_AddELight(const char* pszName, int iSize, void* pbuf); //magic nipples - elights
+	int _cdecl MsgFunc_WepInfo(const char* pszName, int iSize, void* pbuf);
 
 	// Screen information
 	SCREENINFO	m_scrinfo;

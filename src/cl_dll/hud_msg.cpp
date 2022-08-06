@@ -138,3 +138,13 @@ int CHud::MsgFunc_AddELight(const char* pszName, int iSize, void* pbuf)
 	}
 	return 1;
 }
+
+int CHud::MsgFunc_WepInfo(const char* pszName, int iSize, void* pbuf)
+{
+	BEGIN_READ(pbuf, iSize);
+
+	gHUD.curWepID = READ_BYTE();
+	gHUD.curWepClip = READ_BYTE();
+	
+	return 1;
+}

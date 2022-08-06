@@ -269,6 +269,11 @@ int __MsgFunc_AddELight(const char* pszName, int iSize, void* pbuf) //magic nipp
 {
 	return gHUD.MsgFunc_AddELight(pszName, iSize, pbuf);
 }
+
+int __MsgFunc_WepInfo(const char* pszName, int iSize, void* pbuf) // bacontsu
+{
+	return gHUD.MsgFunc_WepInfo(pszName, iSize, pbuf);
+}
  
 // This is called every time the DLL is loaded
 void CHud :: Init( void )
@@ -304,6 +309,7 @@ void CHud :: Init( void )
 	HOOK_MESSAGE( AllowSpec );
 
 	HOOK_MESSAGE(AddELight); //magic nipples - elights
+	HOOK_MESSAGE(WepInfo); // bacontsu
 
 	// VGUI Menus
 	HOOK_MESSAGE( VGUIMenu );

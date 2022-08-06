@@ -189,6 +189,8 @@ int gmsgStatusValue = 0;
 
 int gmsgAddELight = 0;
 
+// bacontsu - weapon infos;
+int gmsgWepInfo = 0;
 
 void LinkUserMessages( void )
 {
@@ -236,6 +238,7 @@ void LinkUserMessages( void )
 	gmsgStatusValue = REG_USER_MSG("StatusValue", 3); 
 
 	gmsgAddELight = REG_USER_MSG("AddELight", -1); //magic nipples - elights
+	gmsgWepInfo = REG_USER_MSG("WepInfo", -1); //bacontsu - weapon info
 }
 
 LINK_ENTITY_TO_CLASS( player, CBasePlayer );
@@ -3805,6 +3808,18 @@ void CBasePlayer :: UpdateClientData( void )
 		FireTargets( "game_playerspawn", this, this, USE_TOGGLE, 0 );
 
 		InitStatusBar();
+	}
+
+	// send data about current weapon
+	auto wep = static_cast<CBasePlayerWeapon*>(m_pActiveItem);
+	if (wep)
+	{
+		//ALERT(at_console, "id: %i clip: %i", wep->m_iId, wep->m_iClip);
+
+		MESSAGE_BEGIN(MSG_ONE, gmsgWepInfo, NULL, pev);
+		WRITE_BYTE(wep->m_iId);
+		WRITE_BYTE(wep->m_iClip);
+		MESSAGE_END();
 	}
 
 	if ( m_iHideHUD != m_iClientHideHUD )
