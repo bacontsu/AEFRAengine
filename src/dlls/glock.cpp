@@ -48,6 +48,7 @@ public:
 	BOOL Deploy( void );
 	void Reload( void );
 	void WeaponIdle( void );
+	void Holster();
 	int m_iShell;
 };
 LINK_ENTITY_TO_CLASS( weapon_glock, CGlock );
@@ -106,9 +107,27 @@ BOOL CGlock::Deploy( )
 	return DefaultDeploy( "models/v_9mmhandgun.mdl", "models/p_9mmhandgun.mdl", GLOCK_DRAW, "onehanded" );
 }
 
+void CGlock::Holster()
+{
+	m_pPlayer->scopeType = 0;
+	m_pPlayer->pev->maxspeed = 0;
+	CBasePlayerWeapon::Holster();
+}
+
 void CGlock::SecondaryAttack( void )
 {
-	GlockFire( 0.1, 0.2, FALSE );
+	if (m_pPlayer->scopeType == WEAPON_GLOCK)
+	{
+		m_pPlayer->scopeType = 0;
+		m_pPlayer->pev->maxspeed = 0;
+	}
+	else
+	{
+		m_pPlayer->scopeType = WEAPON_GLOCK;
+		m_pPlayer->pev->maxspeed = 100;
+	}
+	EMIT_SOUND(edict(), CHAN_WEAPON, "items/9mmclip2.wav", 1, ATTN_NORM);
+	m_flNextSecondaryAttack = gpGlobals->time + 0.5f;
 }
 
 void CGlock::PrimaryAttack( void )
@@ -206,6 +225,9 @@ void CGlock::Reload( void )
 		iResult = DefaultReload(GLOCK_MAX_CLIP, GLOCK_RELOAD, 1.5 );
 	else
 		iResult = DefaultReload(GLOCK_MAX_CLIP, GLOCK_RELOAD_NOT_EMPTY, 1.5 );
+
+	if (m_pPlayer->scopeType == WEAPON_GLOCK)
+		SecondaryAttack();
 
 	if (iResult)
 	{

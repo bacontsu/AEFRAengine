@@ -728,6 +728,50 @@ void V_CalcNormalRefdef(struct ref_params_s* pparams)
 	view->angles[ROLL] -= bob * 1;
 	view->angles[PITCH] -= bob * 0.3;
 
+	//gEngfuncs.Con_Printf("sjsjsjs %i\n", gHUD.scopeType);
+
+	// ADS position
+	Vector targetLerp, targetLerpAngle;
+	switch (gHUD.scopeType)
+	{
+	case 2:
+		targetLerp = Vector(-5.0f, -5.4f, 7.0f);
+		targetLerpAngle = Vector(-10.0f, -3.7f, 2.0f);
+		break;
+	default:
+		targetLerp = targetLerpAngle = Vector(0, 0, 0);
+		break;
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		gHUD.lerpedOrigin[i] = (targetLerp[i] * 0.03f * 300 / (1 / gHUD.m_flTimeDelta)) + (gHUD.lerpedOrigin[i] * (1.0 - 0.03f * 300 / (1 / gHUD.m_flTimeDelta)));
+		gHUD.lerpedAngle[i] = (targetLerpAngle[i] * 0.03f * 300 / (1 / gHUD.m_flTimeDelta)) + (gHUD.lerpedAngle[i] * (1.0 - 0.03f * 300 / (1 / gHUD.m_flTimeDelta)));
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		view->origin[i] += gHUD.lerpedOrigin[0] * pparams->forward[i];
+		view->origin[i] += gHUD.lerpedOrigin[1] * pparams->right[i];
+		view->origin[i] += gHUD.lerpedOrigin[2] * pparams->up[i];
+	}
+
+	view->angles = view->angles + gHUD.lerpedAngle;
+
+	//gEngfuncs.Con_Printf("%f \n", Vector(gHUD.lerpedOrigin).Length());
+
+	/*
+	// test cvar
+	for (int i = 0; i < 3; i++)
+	{
+		view->origin[i] += CVAR_GET_FLOAT("cl_x") * pparams->forward[i];
+		view->origin[i] += CVAR_GET_FLOAT("cl_y") * pparams->right[i];
+		view->origin[i] += CVAR_GET_FLOAT("cl_z") * pparams->up[i];
+	}
+	*/
+
+//	view->angles = view->angles + Vector(CVAR_GET_FLOAT("cl_Angx"), CVAR_GET_FLOAT("cl_Angy"), CVAR_GET_FLOAT("cl_Angz"));
+
 	VectorCopy(view->angles, view->curstate.angles);
 
 	// pushing the view origin down off of the same X/Z plane as the ent's origin will give the
@@ -737,6 +781,7 @@ void V_CalcNormalRefdef(struct ref_params_s* pparams)
 
 	// fudge position around to keep amount of weapon visible
 	// roughly equal with different FOV
+	
 	if (pparams->viewsize == 110)
 	{
 		view->origin[2] += 1;

@@ -1542,6 +1542,43 @@ void CBaseEntity::FireBullets(ULONG cShots, Vector vecSrc, Vector vecDirShooting
 		// make bullet trails
 		UTIL_BubbleTrail(vecSrc, tr.vecEndPos, (flDistance * tr.flFraction) / 64.0);
 	}
+
+	// emit dlight from muzzleflashes
+	Vector vecShootOrigin = pev->origin;
+	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+	WRITE_BYTE(TE_DLIGHT);
+	WRITE_COORD(vecShootOrigin.x); // origin
+	WRITE_COORD(vecShootOrigin.y);
+	WRITE_COORD(vecShootOrigin.z);
+	WRITE_BYTE(25);     // radius
+	WRITE_BYTE(255);     // R
+	WRITE_BYTE(255);     // G
+	WRITE_BYTE(128);     // B
+	WRITE_BYTE(5);     // life * 10
+	WRITE_BYTE(50); // decay
+	MESSAGE_END();
+
+	// emit dlight from hit surface
+	Vector vecShootOrigin2 = tr.vecEndPos;
+	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+	WRITE_BYTE(TE_SPARKS);
+	WRITE_COORD(vecShootOrigin2.x); // origin
+	WRITE_COORD(vecShootOrigin2.y);
+	WRITE_COORD(vecShootOrigin2.z);
+	MESSAGE_END();
+
+	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+	WRITE_BYTE(TE_DLIGHT);
+	WRITE_COORD(vecShootOrigin2.x); // origin
+	WRITE_COORD(vecShootOrigin2.y);
+	WRITE_COORD(vecShootOrigin2.z);
+	WRITE_BYTE(5);     // radius
+	WRITE_BYTE(255);     // R
+	WRITE_BYTE(255);     // G
+	WRITE_BYTE(128);     // B
+	WRITE_BYTE(5);     // life * 10
+	WRITE_BYTE(50); // decay
+	MESSAGE_END();
 	ApplyMultiDamage(pev, pevAttacker);
 }
 

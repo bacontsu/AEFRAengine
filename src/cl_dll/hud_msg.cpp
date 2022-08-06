@@ -145,6 +145,7 @@ int CHud::MsgFunc_WepInfo(const char* pszName, int iSize, void* pbuf)
 
 	gHUD.curWepID = READ_BYTE();
 	gHUD.curWepClip = READ_BYTE();
+	gHUD.scopeType = READ_SHORT();
 	
 	return 1;
 }

@@ -317,6 +317,14 @@ void CHud :: Init( void )
 	CVAR_CREATE( "hud_classautokill", "1", FCVAR_ARCHIVE | FCVAR_USERINFO );		// controls whether or not to suicide immediately on TF class switch
 	CVAR_CREATE( "hud_takesshots", "0", FCVAR_ARCHIVE );		// controls whether or not to automatically take screenshots at the end of a round
 
+	// test cvars
+	CVAR_CREATE("cl_x", 0, FCVAR_ARCHIVE);
+	CVAR_CREATE("cl_y", 0, FCVAR_ARCHIVE);
+	CVAR_CREATE("cl_z", 0, FCVAR_ARCHIVE);
+
+	CVAR_CREATE("cl_Angx", 0, FCVAR_ARCHIVE);
+	CVAR_CREATE("cl_Angy", 0, FCVAR_ARCHIVE);
+	CVAR_CREATE("cl_Angz", 0, FCVAR_ARCHIVE);
 
 	m_iLogo = 0;
 	m_iFOV = 0;

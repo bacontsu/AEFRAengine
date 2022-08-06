@@ -1804,6 +1804,53 @@ void CBasePlayer::PreThink(void)
 
 	CheckSuitUpdate();
 
+	// ADS smooth zooming logic
+	int targetFov;
+	if (scopeType > 0)
+	{
+		targetFov = (int)CVAR_GET_FLOAT("default_fov") - 20;
+		if (m_iFOV == 0) m_iFOV = (int)CVAR_GET_FLOAT("default_fov");
+
+		if (nextZoomUpdate < gpGlobals->time)
+		{
+			if (targetFov > m_iFOV)
+			{
+				m_iFOV++;
+			}
+			else if (targetFov < m_iFOV)
+			{
+				m_iFOV--;
+			}
+
+			nextZoomUpdate = gpGlobals->time + 0.01f;
+		}
+	}
+	else if (scopeType == 0)
+	{
+		targetFov = (int)CVAR_GET_FLOAT("default_fov");
+
+		if (nextZoomUpdate < gpGlobals->time)
+		{
+			if (targetFov > m_iFOV)
+			{
+				if (m_iFOV != 0)
+					m_iFOV++;
+			}
+			else if (targetFov < m_iFOV)
+			{
+				if (m_iFOV != 0)
+					m_iFOV--;
+			}
+			else if (targetFov == m_iFOV)
+			{
+				m_iFOV = 0;
+				scopeType = -1; // set this to a different value so it wont mess with other things
+			}
+
+			nextZoomUpdate = gpGlobals->time + 0.01f;
+		}
+	}
+
 	if (pev->deadflag >= DEAD_DYING)
 	{
 		PlayerDeathThink();
@@ -3819,6 +3866,7 @@ void CBasePlayer :: UpdateClientData( void )
 		MESSAGE_BEGIN(MSG_ONE, gmsgWepInfo, NULL, pev);
 		WRITE_BYTE(wep->m_iId);
 		WRITE_BYTE(wep->m_iClip);
+		WRITE_SHORT(scopeType);
 		MESSAGE_END();
 	}
 

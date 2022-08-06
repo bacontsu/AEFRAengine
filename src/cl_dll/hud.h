@@ -586,6 +586,9 @@ public:
 
 	int			curWepID;
 	int			curWepClip;
+	int			scopeType;
+	float		lerpedOrigin[3];
+	float		lerpedAngle[3];
 
 	int m_iFontHeight;
 	int DrawHudNumber(int x, int y, int iFlags, int iNumber, int r, int g, int b);
