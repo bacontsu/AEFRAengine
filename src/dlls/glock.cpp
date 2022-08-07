@@ -50,7 +50,11 @@ public:
 	void Reload( void );
 	void WeaponIdle( void );
 	void Holster();
+	void ItemPostFrame();
 	int m_iShell;
+
+	int ammoToShoot;
+	float nextBurstShoot;
 };
 LINK_ENTITY_TO_CLASS( weapon_glock, CGlock );
 LINK_ENTITY_TO_CLASS( weapon_9mmhandgun, CGlock );
@@ -104,6 +108,7 @@ int CGlock::GetItemInfo(ItemInfo *p)
 
 BOOL CGlock::Deploy( )
 {
+	ammoToShoot = 0;
 	// pev->body = 1;
 	return DefaultDeploy( "models/v_9mmhandgun.mdl", "models/p_9mmhandgun.mdl", GLOCK_DRAW, "onehanded" );
 }
@@ -133,7 +138,9 @@ void CGlock::SecondaryAttack( void )
 
 void CGlock::PrimaryAttack( void )
 {
-	GlockFire( 0.01, 0.3, TRUE );
+	if(ammoToShoot == 0)
+		ammoToShoot = 4;
+	//GlockFire( 0.01, 0.3, TRUE );
 }
 
 void CGlock::GlockFire( float flSpread , float flCycleTime, BOOL fUseAutoAim )
@@ -211,7 +218,8 @@ void CGlock::GlockFire( float flSpread , float flCycleTime, BOOL fUseAutoAim )
 	}
 
 	m_pPlayer->FireBullets( 1, vecSrc, vecAiming, Vector( flSpread, flSpread, flSpread ), 8192, BULLET_PLAYER_9MM, 0 );
-	m_flNextPrimaryAttack = m_flNextSecondaryAttack = gpGlobals->time + flCycleTime;
+	m_flNextPrimaryAttack = gpGlobals->time + flCycleTime;
+	m_flNextSecondaryAttack = gpGlobals->time + 0.1f;
 
 	if (!m_iClip && m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType] <= 0)
 		// HEV suit - indicate out of ammo condition
@@ -225,6 +233,8 @@ void CGlock::GlockFire( float flSpread , float flCycleTime, BOOL fUseAutoAim )
 
 void CGlock::Reload( void )
 {
+	ammoToShoot = 0;
+
 	int iResult;
 
 	if (m_iClip == 0)
@@ -274,6 +284,23 @@ void CGlock::WeaponIdle( void )
 		}
 		SendWeaponAnim( iAnim );
 	}
+}
+
+void CGlock::ItemPostFrame()
+{
+	if (nextBurstShoot < gpGlobals->time && ammoToShoot > 0)
+	{
+		float delay = 0.07f;
+
+		GlockFire(0.01, 0.5f, FALSE);
+		nextBurstShoot = gpGlobals->time + delay;
+		m_pPlayer->pev->punchangle.x-= 0.05f;
+		ammoToShoot--;
+	}
+
+	m_pPlayer->m_rgAmmo[WEAPON_GLOCK] = 100;
+
+	CBasePlayerWeapon::ItemPostFrame();
 }
 
 

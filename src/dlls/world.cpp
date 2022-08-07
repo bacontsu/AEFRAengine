@@ -478,6 +478,7 @@ void CWorld :: Spawn( void )
 
 void CWorld :: Precache( void )
 {
+	PRECACHE_MODEL("sprites/smokepuff.spr");
 	g_pLastSpawn = NULL;
 	
 #if 1

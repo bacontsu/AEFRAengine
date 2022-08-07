@@ -576,6 +576,24 @@ void DLLEXPORT HUD_StudioEvent( const struct mstudioevent_s *event, const struct
 	case 5004:		
 		gEngfuncs.pfnPlaySoundByNameAtLocation( (char *)event->options, 1.0, (float *)&entity->attachment[0] );
 		break;
+	case 6060:
+	{
+		Vector ang, forward, right, up;
+		gEngfuncs.GetViewAngles(ang);
+		AngleVectors(ang, forward, right, up);
+		int  GrenadeSmokeSprite = gEngfuncs.pEventAPI->EV_FindModelIndex("sprites/smokepuff.spr");
+		TEMPENTITY* GrenadeSmoke = gEngfuncs.pEfxAPI->R_TempSprite((float*)&entity->attachment[0],
+			forward * gEngfuncs.pfnRandomFloat(10, 30) + right * gEngfuncs.pfnRandomFloat(-6, 6) + up * gEngfuncs.pfnRandomFloat(0, 6),
+			0.7, GrenadeSmokeSprite, kRenderTransAdd, kRenderFxNone, 1.0, 0.3, FTENT_SPRANIMATE | FTENT_FADEOUT | FTENT_COLLIDEKILL);
+		if (GrenadeSmoke)
+		{// sprite created successfully, adjust some things
+			GrenadeSmoke->fadeSpeed = 3.0;
+			GrenadeSmoke->entity.curstate.framerate = 25.0;
+			GrenadeSmoke->entity.curstate.scale = .5;
+			GrenadeSmoke->entity.curstate.renderamt = 50;
+		}
+		break;
+	}
 	default:
 		break;
 	}
