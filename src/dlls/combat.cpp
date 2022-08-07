@@ -1558,27 +1558,31 @@ void CBaseEntity::FireBullets(ULONG cShots, Vector vecSrc, Vector vecDirShooting
 	WRITE_BYTE(50); // decay
 	MESSAGE_END();
 
-	// emit dlight from hit surface
-	Vector vecShootOrigin2 = tr.vecEndPos;
-	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-	WRITE_BYTE(TE_SPARKS);
-	WRITE_COORD(vecShootOrigin2.x); // origin
-	WRITE_COORD(vecShootOrigin2.y);
-	WRITE_COORD(vecShootOrigin2.z);
-	MESSAGE_END();
+	auto ent = CBaseEntity::Instance(tr.pHit);
+	if (ent && ent->IsBSPModel())
+	{
+		// emit spark and dlight from hit surface
+		Vector vecShootOrigin2 = tr.vecEndPos;
+		MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+		WRITE_BYTE(TE_SPARKS);
+		WRITE_COORD(vecShootOrigin2.x); // origin
+		WRITE_COORD(vecShootOrigin2.y);
+		WRITE_COORD(vecShootOrigin2.z);
+		MESSAGE_END();
 
-	MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
-	WRITE_BYTE(TE_DLIGHT);
-	WRITE_COORD(vecShootOrigin2.x); // origin
-	WRITE_COORD(vecShootOrigin2.y);
-	WRITE_COORD(vecShootOrigin2.z);
-	WRITE_BYTE(5);     // radius
-	WRITE_BYTE(255);     // R
-	WRITE_BYTE(255);     // G
-	WRITE_BYTE(128);     // B
-	WRITE_BYTE(5);     // life * 10
-	WRITE_BYTE(50); // decay
-	MESSAGE_END();
+		MESSAGE_BEGIN(MSG_BROADCAST, SVC_TEMPENTITY);
+		WRITE_BYTE(TE_DLIGHT);
+		WRITE_COORD(vecShootOrigin2.x); // origin
+		WRITE_COORD(vecShootOrigin2.y);
+		WRITE_COORD(vecShootOrigin2.z);
+		WRITE_BYTE(5);     // radius
+		WRITE_BYTE(255);     // R
+		WRITE_BYTE(255);     // G
+		WRITE_BYTE(128);     // B
+		WRITE_BYTE(5);     // life * 10
+		WRITE_BYTE(50); // decay
+		MESSAGE_END();
+	}
 	ApplyMultiDamage(pev, pevAttacker);
 }
 

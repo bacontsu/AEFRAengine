@@ -31,7 +31,8 @@ enum glock_e {
 	GLOCK_RELOAD_NOT_EMPTY,
 	GLOCK_DRAW,
 	GLOCK_HOLSTER,
-	GLOCK_ADD_SILENCER
+	GLOCK_ADD_SILENCER,
+	GLOCK_SHOOT2,
 };
 
 class CGlock : public CBasePlayerWeapon
@@ -152,10 +153,15 @@ void CGlock::GlockFire( float flSpread , float flCycleTime, BOOL fUseAutoAim )
 
 	m_pPlayer->pev->effects = (int)(m_pPlayer->pev->effects) | EF_MUZZLEFLASH;
 
-	if (m_iClip != 0)
-		SendWeaponAnim( GLOCK_SHOOT );
+	if (m_pPlayer->scopeType != WEAPON_GLOCK)
+	{
+		if (m_iClip != 0)
+			SendWeaponAnim(GLOCK_SHOOT);
+		else
+			SendWeaponAnim(GLOCK_SHOOT_EMPTY);
+	}
 	else
-		SendWeaponAnim( GLOCK_SHOOT_EMPTY );
+		SendWeaponAnim(GLOCK_SHOOT2);
 
 	// player "shoot" animation
 	m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
