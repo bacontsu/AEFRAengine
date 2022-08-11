@@ -1357,4 +1357,24 @@ BOOL ( WINAPI *pwglGetPixelFormatAttribiv)( HDC hDC, int iPixelFormat, int iLaye
 BOOL ( WINAPI *pwglChoosePixelFormat)( HDC hDC, const int *piAttribIList, const FLOAT *pfAttribFList, UINT nMaxFmts, int *piFmts, UINT *nNumFmts );
 const char *( WINAPI * pwglGetExtensionsStringEXT)( void );
 
+GLhandleARB(APIENTRY* pglCreateShader)(GLenum shaderType);
+void (APIENTRY* pglAttachShader)(GLuint program, GLuint shader);
+void (APIENTRY* pglDetachShader)(GLuint program, GLuint shader);
+void (APIENTRY* pglCompileShader)(GLuint shader);
+void (APIENTRY* pglGetShaderSource)(GLuint shader, GLsizei bufSize, GLsizei* length, GLcharARB* source);
+void (APIENTRY* pglShaderSource)(GLuint shader, GLsizei count, const GLcharARB* const* string, const GLint* length);
+void (APIENTRY* pglGetShaderiv)(GLuint shader, GLenum pname, GLint* params);
+void (APIENTRY* pglDeleteShader)(GLuint shader);
+ void (APIENTRY* pglLinkProgram)(GLuint program);
+ void (APIENTRY* pglUseProgram)(GLuint program);
+ void (APIENTRY* pglValidateProgram)(GLuint program);
+ GLhandleARB(APIENTRY* pglCreateProgram)(void);
+ void (APIENTRY* pglDeleteProgram)(GLuint program);
+ void (APIENTRY* pglGetShaderInfoLog)(GLuint shader, GLsizei maxLength, GLsizei* length, GLcharARB* infoLog);
+ void (APIENTRY* pglGetProgramInfoLog)(GLuint program, GLsizei maxLength, GLsizei* length, GLcharARB* infoLog);
+ void (APIENTRY* pglGetActiveUniform)(GLuint program, GLuint index, GLsizei bufSize, GLsizei* length, GLint* size, GLenum* type, GLcharARB* name);
+ GLint(APIENTRY* pglGetUniformLocation)(GLuint program, const GLcharARB* name);
+ void (APIENTRY* pglGetProgramiv)(GLenum target, GLenum pname, GLint* params);
+ void (APIENTRY* pglBlendEquation)(GLenum);
+
 #endif//GL_EXPORT_H

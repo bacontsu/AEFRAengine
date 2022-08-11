@@ -574,6 +574,7 @@ enum
 	GL_EXT_GPU_SHADER4,		// shaders only
 	GL_DEPTH_TEXTURE,
 	GL_DEBUG_OUTPUT,
+	R_OPENGL_200,
 	GL_EXTCOUNT,		// must be last
 };
 

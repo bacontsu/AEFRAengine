@@ -60,7 +60,7 @@
       <WarningLevel>Level3</WarningLevel>
       <MinimalRebuild>false</MinimalRebuild>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>./;../common;../pm_shared;../engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../common;../pm_shared;D:\c++ shit\Absolute-Zero-Xash3D\src\imgui;../engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BrowseInformation>true</BrowseInformation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -107,7 +107,7 @@
       <Optimization>MaxSpeed</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>./;../common;../pm_shared;../engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../common;../pm_shared;D:\c++ shit\Absolute-Zero-Xash3D\src\imgui;../engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -135,7 +135,7 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <ModuleDefinitionFile>.\mainui.def</ModuleDefinitionFile>
       <ImportLibrary>$(SolutionDir)build\$(TargetName)\$(TargetName).lib</ImportLibrary>
-      <AdditionalDependencies>msvcrt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>msvcrt.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <ProgramDatabaseFile>$(SolutionDir)build\$(TargetName)\$(TargetName).pdb</ProgramDatabaseFile>
     </Link>
     <CustomBuildStep>
@@ -146,6 +146,21 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\imgui\backends\imgui_impl_opengl2.cpp" />
+    <ClCompile Include="..\imgui\backends\imgui_impl_win32.cpp" />
+    <ClCompile Include="..\imgui\examples\example_glfw_opengl2\main.cpp" />
+    <ClCompile Include="..\imgui\examples\example_glfw_opengl3\main.cpp" />
+    <ClCompile Include="..\imgui\examples\example_glut_opengl2\main.cpp" />
+    <ClCompile Include="..\imgui\examples\example_sdl_opengl2\main.cpp" />
+    <ClCompile Include="..\imgui\examples\example_sdl_opengl3\main.cpp" />
+    <ClCompile Include="..\imgui\examples\libs\usynergy\uSynergy.c" />
+    <ClCompile Include="..\imgui\imgui.cpp" />
+    <ClCompile Include="..\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\imgui\imgui_tables.cpp" />
+    <ClCompile Include="..\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="..\imgui\misc\cpp\imgui_stdlib.cpp" />
+    <ClCompile Include="..\imgui\misc\fonts\binary_to_compressed_c.cpp" />
     <ClCompile Include="basemenu.cpp" />
     <ClCompile Include="menu_advcontrols.cpp" />
     <ClCompile Include="menu_audio.cpp" />
@@ -174,6 +189,20 @@
     <ClCompile Include="utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\imgui\backends\imgui_impl_opengl2.h" />
+    <ClInclude Include="..\imgui\backends\imgui_impl_win32.h" />
+    <ClInclude Include="..\imgui\examples\libs\glfw\include\GLFW\glfw3.h" />
+    <ClInclude Include="..\imgui\examples\libs\glfw\include\GLFW\glfw3native.h" />
+    <ClInclude Include="..\imgui\examples\libs\usynergy\uSynergy.h" />
+    <ClInclude Include="..\imgui\imconfig.h" />
+    <ClInclude Include="..\imgui\imgui.h" />
+    <ClInclude Include="..\imgui\imgui_internal.h" />
+    <ClInclude Include="..\imgui\imstb_rectpack.h" />
+    <ClInclude Include="..\imgui\imstb_textedit.h" />
+    <ClInclude Include="..\imgui\imstb_truetype.h" />
+    <ClInclude Include="..\imgui\misc\cpp\imgui_stdlib.h" />
+    <ClInclude Include="..\imgui\misc\freetype\imgui_freetype.h" />
+    <ClInclude Include="..\imgui\misc\single_file\imgui_single_file.h" />
     <ClInclude Include="basemenu.h" />
     <ClInclude Include="enginecallback.h" />
     <ClInclude Include="extdll.h" />

@@ -269,6 +269,30 @@ static dllfunc_t opengl_110funcs[] =
 { NULL					, NULL }
 };
 
+static dllfunc_t opengl_200funcs[] =
+{
+{ "glCreateShader"				, (void**)&pglCreateShader },
+{ "glAttachShader"				, (void**)&pglAttachShader },
+{ "glDetachShader"				, (void**)&pglDetachShader },
+{ "glCompileShader"				, (void**)&pglCompileShader },
+{ "glShaderSource"				, (void**)&pglShaderSource },
+{ "glGetShaderSource"			, (void**)&pglGetShaderSource },
+{ "glGetShaderiv"				, (void**)&pglGetShaderiv },
+{ "glDeleteShader"		        , (void**)&pglDeleteShader },
+{ "glUseProgram"				, (void**)&pglUseProgram },
+{ "glLinkProgram"				, (void**)&pglLinkProgram },
+{ "glValidateProgram"			, (void**)&pglValidateProgram },
+{ "glCreateProgram"				, (void**)&pglCreateProgram },
+{ "glDeleteProgram"				, (void**)&pglDeleteProgram },
+{ "glGetShaderInfoLog"			, (void**)&pglGetShaderInfoLog },
+{ "glGetProgramInfoLog"			, (void**)&pglGetProgramInfoLog },
+{ "glGetActiveUniform"			, (void**)&pglGetActiveUniform },
+{ "glGetUniformLocation"		, (void**)&pglGetUniformLocation },
+{ "glGetProgramiv"              , (void**)&pglGetProgramiv },
+{ "glBlendEquation"             , (void**)&pglBlendEquation },
+{ NULL, NULL }
+};
+
 static dllfunc_t debugoutputfuncs[] =
 {
 { "glDebugMessageControlARB"			, (void **)&pglDebugMessageControlARB },
@@ -1688,6 +1712,7 @@ void GL_InitExtensions( void )
 {
 	// initialize gl extensions
 	GL_CheckExtension( "OpenGL 1.1.0", opengl_110funcs, NULL, GL_OPENGL_110 );
+	GL_CheckExtension("OpenGL 2.0", opengl_200funcs, NULL, R_OPENGL_200);
 
 	// get our various GL strings
 	glConfig.vendor_string = pglGetString( GL_VENDOR );
