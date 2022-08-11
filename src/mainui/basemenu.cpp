@@ -30,8 +30,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "menu_btnsbmp_table.h"
 //CR
 #include "ui_title_anim.h"
+
+// imgui
 #include "imgui.h"
 #include "backends/imgui_impl_opengl2.h"
+#include <GL/gl.h>
 
 cvar_t		*ui_precache;
 cvar_t		*ui_showmodels;
@@ -663,18 +666,6 @@ UI_DrawMenu
 */
 void UI_DrawMenu( menuFramework_s *menu )
 {
-	ImGui_ImplOpenGL2_NewFrame();
-	ImGui::NewFrame();
-
-	ImGui::Begin("test");
-	ImGui::Text("hello");
-	ImGui::End();
-
-	//glViewport( 0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y );
-	ImGui::Render();
-	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
-
-	return;
 	static long	statusFadeTime;
 	static menuCommon_s	*lastItem;
 	menuCommon_s	*item;
@@ -1108,6 +1099,17 @@ void UI_UpdateMenu( float flTime )
 			first = FALSE;
 		}
 	}
+
+	ImGui_ImplOpenGL2_NewFrame();
+	ImGui::NewFrame();
+
+	ImGui::Begin("test");
+	ImGui::Text("hello");
+	ImGui::End();
+
+	glViewport(0, 0, (int)ImGui::GetIO().DisplaySize.x, (int)ImGui::GetIO().DisplaySize.y);
+	ImGui::Render();
+	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
 
 	//CR
 	UI_DrawTitleAnim();
@@ -1642,6 +1644,7 @@ void UI_Init( void )
 	ImGuiIO& io = ImGui::GetIO(); (void)io;
 	// Setup Dear ImGui style
 	ImGui::StyleColorsDark();
+	io.DisplaySize = ImVec2(ScreenWidth, ScreenHeight);
 
 	// Setup Platform/Renderer bindings
 	ImGui_ImplOpenGL2_Init();

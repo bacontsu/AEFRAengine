@@ -107,7 +107,7 @@
       <Optimization>MaxSpeed</Optimization>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>./;../common;../pm_shared;D:\c++ shit\Absolute-Zero-Xash3D\src\imgui;../engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;../common;../pm_shared;../engine;D:\c++ shit\Absolute-Zero-Xash3D\src\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -148,11 +148,6 @@
   <ItemGroup>
     <ClCompile Include="..\imgui\backends\imgui_impl_opengl2.cpp" />
     <ClCompile Include="..\imgui\backends\imgui_impl_win32.cpp" />
-    <ClCompile Include="..\imgui\examples\example_glfw_opengl2\main.cpp" />
-    <ClCompile Include="..\imgui\examples\example_glfw_opengl3\main.cpp" />
-    <ClCompile Include="..\imgui\examples\example_glut_opengl2\main.cpp" />
-    <ClCompile Include="..\imgui\examples\example_sdl_opengl2\main.cpp" />
-    <ClCompile Include="..\imgui\examples\example_sdl_opengl3\main.cpp" />
     <ClCompile Include="..\imgui\examples\libs\usynergy\uSynergy.c" />
     <ClCompile Include="..\imgui\imgui.cpp" />
     <ClCompile Include="..\imgui\imgui_demo.cpp" />

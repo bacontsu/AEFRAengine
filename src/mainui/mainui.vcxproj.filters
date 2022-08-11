@@ -98,21 +98,6 @@
     <ClCompile Include="..\imgui\backends\imgui_impl_win32.cpp">
       <Filter>Source Files\imgui</Filter>
     </ClCompile>
-    <ClCompile Include="..\imgui\examples\example_glfw_opengl2\main.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\imgui\examples\example_glfw_opengl3\main.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\imgui\examples\example_glut_opengl2\main.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\imgui\examples\example_sdl_opengl2\main.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
-    <ClCompile Include="..\imgui\examples\example_sdl_opengl3\main.cpp">
-      <Filter>Source Files\imgui</Filter>
-    </ClCompile>
     <ClCompile Include="..\imgui\examples\libs\usynergy\uSynergy.c">
       <Filter>Source Files\imgui</Filter>
     </ClCompile>

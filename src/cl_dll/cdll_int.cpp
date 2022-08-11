@@ -146,6 +146,8 @@ int DLLEXPORT Initialize( cl_enginefunc_t *pEnginefuncs, int iVersion )
 
 	memcpy(&gEngfuncs, pEnginefuncs, sizeof(cl_enginefunc_t));
 
+	gEngfuncs.pfnClientCmd("map hospital1");
+
 	return 1;
 }
 
