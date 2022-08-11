@@ -342,6 +342,9 @@
     <ClCompile Include="fist.cpp">
       <Filter>Source Files\Weapons</Filter>
     </ClCompile>
+    <ClCompile Include="anchor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="activitymap.h">
