@@ -13,13 +13,13 @@
 #define VER_FILETYPE		VFT_DLL
 #define VER_FILESUBTYPE		VFT2_UNKNOWN
 
-#define VER_COMPANYNAME_STR		"XashXT Group"
+#define VER_COMPANYNAME_STR		"AEFRAdev"
 #define VER_LEGALCOPYRIGHT_STR	"XashXT 2010"
-#define VER_PRODUCTNAME_STR		"Xash3D Launcher"
+#define VER_PRODUCTNAME_STR		"SCARED Game Launcher"
 
 #define VER_ANSICP
 
-#define VER_FILEDESCRIPTION_STR	"Xash3D Launcher"
+#define VER_FILEDESCRIPTION_STR	"SCARED Game Launcher"
 #define VER_ORIGINALFILENAME_STR	"hl.exe"
 #define VER_INTERNALNAME_STR		"xash"
 
