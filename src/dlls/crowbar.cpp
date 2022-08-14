@@ -35,6 +35,7 @@ public:
 	void EXPORT SwingAgain( void );
 	void EXPORT Smack( void );
 	int GetItemInfo(ItemInfo *p);
+	void WeaponIdle();
 
 	void PrimaryAttack( void );
 	int Swing( int fFirst );
@@ -56,7 +57,9 @@ enum gauss_e {
 	CROWBAR_ATTACK2MISS,
 	CROWBAR_ATTACK2HIT,
 	CROWBAR_ATTACK3MISS,
-	CROWBAR_ATTACK3HIT
+	CROWBAR_ATTACK3HIT,
+	CROWBAR_IDLE2,
+	CROWBAR_IDLE3,
 };
 
 
@@ -165,6 +168,29 @@ void CCrowbar::PrimaryAttack()
 		SetThink(&CCrowbar::SwingAgain );
 		pev->nextthink = gpGlobals->time + 0.1;
 	}
+	m_flTimeWeaponIdle = gpGlobals->time + 1.0f;
+}
+
+void CCrowbar::WeaponIdle()
+{
+	if (m_flTimeWeaponIdle < gpGlobals->time)
+	{
+		switch (RANDOM_LONG(0, 2))
+		{
+		case 0:
+			SendWeaponAnim(CROWBAR_IDLE);
+			m_flTimeWeaponIdle = gpGlobals->time + 2.8f;
+			break;
+		case 1:
+			SendWeaponAnim(CROWBAR_IDLE2);
+			m_flTimeWeaponIdle = gpGlobals->time + 5.4f;
+			break;
+		case 2:
+			SendWeaponAnim(CROWBAR_IDLE3);
+			m_flTimeWeaponIdle = gpGlobals->time + 5.4f;
+			break;
+		}
+	}
 }
 
 
@@ -214,13 +240,13 @@ int CCrowbar::Swing( int fFirst )
 			switch( (m_iSwing++) % 3 )
 			{
 			case 0:
-				SendWeaponAnim( CROWBAR_ATTACK1MISS ); break;
+				SendWeaponAnim(CROWBAR_ATTACK1MISS); m_flNextPrimaryAttack = gpGlobals->time + 0.5f;  break;
 			case 1:
-				SendWeaponAnim( CROWBAR_ATTACK2MISS ); break;
+				SendWeaponAnim(CROWBAR_ATTACK2MISS); m_flNextPrimaryAttack = gpGlobals->time + 0.64f; break;
 			case 2:
-				SendWeaponAnim( CROWBAR_ATTACK3MISS ); break;
+				SendWeaponAnim(CROWBAR_ATTACK3MISS); m_flNextPrimaryAttack = gpGlobals->time + 0.79f; break;
 			}
-			m_flNextPrimaryAttack = gpGlobals->time + 0.5;
+			//m_flNextPrimaryAttack = gpGlobals->time + 0.5;
 			// play wiff or swish sound
 			EMIT_SOUND_DYN(ENT(m_pPlayer->pev), CHAN_WEAPON, "weapons/cbar_miss1.wav", 1, ATTN_NORM, 0, 94 + RANDOM_LONG(0,0xF));
 
@@ -234,16 +260,6 @@ int CCrowbar::Swing( int fFirst )
 		fDidHit = TRUE;
 
 		CBaseEntity *pEntity = CBaseEntity::Instance(tr.pHit);
-
-		switch( ((m_iSwing++) % 2) + 1 )
-		{
-		case 0:
-			SendWeaponAnim( CROWBAR_ATTACK1HIT ); break;
-		case 1:
-			SendWeaponAnim( CROWBAR_ATTACK2HIT ); break;
-		case 2:
-			SendWeaponAnim( CROWBAR_ATTACK3HIT ); break;
-		}
 
 		// player "shoot" animation
 		m_pPlayer->SetAnimation( PLAYER_ATTACK1 );
@@ -268,7 +284,17 @@ int CCrowbar::Swing( int fFirst )
 
 		ApplyMultiDamage( m_pPlayer->pev, m_pPlayer->pev );
 
-		m_flNextPrimaryAttack = gpGlobals->time + 0.25;
+		switch (((m_iSwing++) % 2) + 1)
+		{
+		case 0:
+			SendWeaponAnim(CROWBAR_ATTACK1HIT); m_flNextPrimaryAttack = gpGlobals->time + 0.5f; break;
+		case 1:
+			SendWeaponAnim(CROWBAR_ATTACK2HIT); m_flNextPrimaryAttack = gpGlobals->time + 0.64f; break;
+		case 2:
+			SendWeaponAnim(CROWBAR_ATTACK3HIT); m_flNextPrimaryAttack = gpGlobals->time + 0.79f; break;
+		}
+
+		//m_flNextPrimaryAttack = gpGlobals->time + 0.25;
 
 		// play thwack, smack, or dong sound
 		float flVol = 1.0;
