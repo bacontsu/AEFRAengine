@@ -3363,8 +3363,24 @@ static void GL_StudioDrawShadow( void )
 {
 	pglDepthMask( GL_TRUE );
 
+	static char	mapname[64];
+	int isSpecialMap = 0;
+
+	if (cls.state >= ca_connected)
+		Q_snprintf(mapname, sizeof(mapname), "%s", clgame.mapname);
+	else mapname[0] = '\0'; // not in game
+
+	//Con_Printf("mapname %s", mapname);
+
+	if (!stricmp(mapname, "forest1") || !stricmp(mapname, "cave1"))
+	{
+		isSpecialMap = 1;
+	}
+
+	//Con_Printf("specialmap %i\n", isSpecialMap);
+
 	//magic nipples - shadows | changed r_shadows.value to -> to prevent error
-	if (r_shadows->value && g_studio.rendermode != kRenderTransAdd && !FBitSet(RI.currentmodel->flags, STUDIO_AMBIENT_LIGHT))
+	if (r_shadows->value && g_studio.rendermode != kRenderTransAdd && !FBitSet(RI.currentmodel->flags, STUDIO_AMBIENT_LIGHT) && isSpecialMap == 0)
 	{
 		float	color = 1.0 - (tr.blend * 0.5);
 
