@@ -377,9 +377,9 @@ static void UI_Main_Init( void )
 	uiMain.newGame.generic.type = QMTYPE_BM_BUTTON;
 	uiMain.newGame.generic.name = "New game";
 	uiMain.newGame.generic.flags = QMF_HIGHLIGHTIFFOCUS|QMF_DROPSHADOW|QMF_NOTIFY;
-	uiMain.newGame.generic.statusText = MenuStrings[HINT_NEWGAME];
+	uiMain.newGame.generic.statusText = 0;
 	uiMain.newGame.generic.x = UI_MAINSELECTION_POSX;
-	uiMain.newGame.generic.y = 280;
+	uiMain.newGame.generic.y = 550;
 	uiMain.newGame.generic.callback = UI_Main_Callback;
 
 	UI_UtilSetupPicButton( &uiMain.newGame, PC_NEW_GAME );
@@ -432,9 +432,9 @@ static void UI_Main_Init( void )
 	uiMain.configuration.generic.type = QMTYPE_BM_BUTTON;
 	uiMain.configuration.generic.flags = QMF_HIGHLIGHTIFFOCUS|QMF_DROPSHADOW|QMF_NOTIFY;
 	uiMain.configuration.generic.name = "Configuration";
-	uiMain.configuration.generic.statusText = MenuStrings[HINT_CONFIGURATION];
+	uiMain.configuration.generic.statusText = 0;
 	uiMain.configuration.generic.x = UI_MAINSELECTION_POSX;
-	uiMain.configuration.generic.y = bTrainMap ? 430 : 380;
+	uiMain.configuration.generic.y = 590;
 	uiMain.configuration.generic.callback = UI_Main_Callback;
 
 	UI_UtilSetupPicButton( &uiMain.configuration, PC_CONFIG );
@@ -489,7 +489,7 @@ static void UI_Main_Init( void )
 	uiMain.quit.generic.type = QMTYPE_BM_BUTTON;
 	uiMain.quit.generic.flags = QMF_HIGHLIGHTIFFOCUS|QMF_DROPSHADOW|QMF_NOTIFY;
 	uiMain.quit.generic.name = "Quit";
-	uiMain.quit.generic.statusText = MenuStrings[HINT_QUIT_BUTTON];
+	uiMain.quit.generic.statusText = 0;
 	uiMain.quit.generic.x = UI_MAINSELECTION_POSX;
 	uiMain.quit.generic.y = (bCustomGame) ? (bTrainMap ? 630 : 580) : (bTrainMap ? 580 : 530);
 	uiMain.quit.generic.callback = UI_Main_Callback;
@@ -570,23 +570,14 @@ static void UI_Main_Init( void )
 	if ( gpGlobals->allow_console )
 		UI_AddItem( &uiMain.menu, (void *)&uiMain.console );
 
-	UI_AddItem( &uiMain.menu, (void *)&uiMain.resumeGame );
+	UI_AddItem(&uiMain.menu, (void*)&uiMain.resumeGame);
+
 	UI_AddItem( &uiMain.menu, (void *)&uiMain.newGame );
 
-	if ( bTrainMap )
-		UI_AddItem( &uiMain.menu, (void *)&uiMain.hazardCourse );
-
-	UI_AddItem( &uiMain.menu, (void *)&uiMain.saveRestore );
 	UI_AddItem( &uiMain.menu, (void *)&uiMain.configuration );
-	UI_AddItem( &uiMain.menu, (void *)&uiMain.multiPlayer );
 
-	if ( bCustomGame )
-		UI_AddItem( &uiMain.menu, (void *)&uiMain.customGame );
-
-	UI_AddItem( &uiMain.menu, (void *)&uiMain.previews );
 	UI_AddItem( &uiMain.menu, (void *)&uiMain.quit );
-	UI_AddItem( &uiMain.menu, (void *)&uiMain.minimizeBtn );
-	UI_AddItem( &uiMain.menu, (void *)&uiMain.quitButton );
+	
 	UI_AddItem( &uiMain.menu, (void *)&uiMain.msgBox );
 	UI_AddItem( &uiMain.menu, (void *)&uiMain.quitMessage );
 	UI_AddItem( &uiMain.menu, (void *)&uiMain.dlgMessage1 );

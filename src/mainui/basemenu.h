@@ -91,7 +91,7 @@ GNU General Public License for more details.
 #define UI_BANNER_HEIGHT		128
 
 #define UI_SELECTION_POSX		82
-#define UI_MAINSELECTION_POSX		110
+#define UI_MAINSELECTION_POSX		50
 
 // menu buttons dims
 #define UI_BUTTONS_WIDTH		240
