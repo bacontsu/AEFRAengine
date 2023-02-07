@@ -192,6 +192,9 @@ int gmsgAddELight = 0;
 // bacontsu - weapon infos;
 int gmsgWepInfo = 0;
 
+// LRC
+int gmsgParticle = 0;
+
 void LinkUserMessages( void )
 {
 	// Already taken care of?
@@ -239,6 +242,7 @@ void LinkUserMessages( void )
 
 	gmsgAddELight = REG_USER_MSG("AddELight", -1); //magic nipples - elights
 	gmsgWepInfo = REG_USER_MSG("WepInfo", -1); //bacontsu - weapon info
+	gmsgParticle = REG_USER_MSG("Particle", -1);	   //LRC
 }
 
 LINK_ENTITY_TO_CLASS( player, CBasePlayer );

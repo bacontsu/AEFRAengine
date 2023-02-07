@@ -2274,3 +2274,105 @@ void CItemSoda::CanTouch ( CBaseEntity *pOther )
 	SetThink ( &CBaseEntity::SUB_Remove );
 	pev->nextthink = gpGlobals->time;
 }
+
+//=========================================================
+// LRC - env_particle, uses the aurora particle system
+//=========================================================
+extern int gmsgParticle;
+#define SF_PARTICLE_ON 1
+#define SF_PARTICLE_SPAWNUSE 2 //AJH for spawnable env_particles
+
+class CParticle : public CPointEntity
+{
+public:
+	void Spawn() override;
+	void Activate() override;
+	void Precache() override;
+	void EXPORT Think() override;
+
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value) override;
+};
+
+LINK_ENTITY_TO_CLASS(env_particle, CParticle);
+
+void CParticle::Spawn(void)
+{
+	pev->solid = SOLID_NOT;
+
+	//	pev->movetype		= MOVETYPE_NONE;	//AJH
+	pev->movetype = MOVETYPE_NOCLIP; //AJH
+
+	pev->renderamt = 128;
+	pev->rendermode = kRenderTransTexture;
+
+	// 'body' determines whether the effect is active or not //AJH only if we have a targetname
+	pev->body = pev->targetname ? (pev->spawnflags & SF_PARTICLE_ON) != 0 : 1;
+
+	Precache();
+
+	UTIL_SetOrigin(pev, pev->origin);
+	SET_MODEL(edict(), "sprites/null.spr");
+	SetThink(&CParticle::Think);
+	pev->nextthink = gpGlobals->time + 1.0f;
+}
+
+
+void CParticle::Precache(void)
+{
+	PRECACHE_MODEL("sprites/null.spr");
+}
+
+void CParticle::Activate(void)
+{
+	CPointEntity::Activate();
+}
+
+void CParticle::Think()
+{
+	if(pev->body != 0)
+	{
+		MESSAGE_BEGIN(MSG_ALL, gmsgParticle);
+		WRITE_SHORT(entindex());
+		WRITE_STRING(STRING(pev->message));
+		MESSAGE_END();
+	}
+
+	//ALERT(at_console, "particle state: %i", pev->body);
+
+	pev->nextthink = gpGlobals->time + 1;
+}
+
+void CParticle::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	if (pev->spawnflags & SF_PARTICLE_SPAWNUSE || useType == USE_SPAWN)
+	{ //AJH Spawnable env_particles!!
+
+		// Create a new entity with Cparticle private data
+		CParticle* pParticle = GetClassPtr((CParticle*)NULL);
+		pParticle->pev->classname = MAKE_STRING("particle");
+
+		if (pev->netname != NULL)
+		{
+			pParticle->pev->targetname = pev->netname; // set childrens name (targetname) from netname
+		}
+
+		pParticle->pev->message = pev->message;
+		pParticle->pev->origin = pActivator->pev->origin;
+		pParticle->pev->angles = pActivator->pev->angles;
+		pParticle->Spawn();
+		pParticle->pev->body = 1; //turn children on automatically
+		pParticle->Think();
+		pParticle->pev->nextthink = gpGlobals->time + 1.0f;
+
+		//	ALERT(at_debug,"Particle %s spawned new particle %s\n",STRING(pev->targetname),STRING(pParticle->pev->targetname));
+	}
+	else
+	{ //AJH Standard non spawnuse USE function
+
+		if (ShouldToggle(useType, pev->body))
+		{
+			pev->body = !pev->body;
+			//ALERT(at_console, "Toggling Particle on/off %d\n", pev->body);
+		}
+	}
+}

@@ -404,6 +404,15 @@ private:
 };
 
 
+class CHudParticle : public CHudBase
+{
+public:
+	int Init(void) override;
+	int VidInit(void) override;
+	int Draw(float flTime) override;
+	int MsgFunc_Particle(const char* pszName, int iSize, void* pbuf);
+};
+
 //
 //-----------------------------------------------------
 //
@@ -635,6 +644,7 @@ public:
 	CHudAmmoSecondary	m_AmmoSecondary;
 	CHudTextMessage m_TextMessage;
 	CHudStatusIcons m_StatusIcons;
+	CHudParticle m_Particle;
 
 	void Init(void);
 	void VidInit(void);

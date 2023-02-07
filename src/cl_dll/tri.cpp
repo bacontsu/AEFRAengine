@@ -16,6 +16,7 @@
 #include "entity_state.h"
 #include "cl_entity.h"
 #include "triangleapi.h"
+#include "particlemgr.h"
 
 #define DLLEXPORT __declspec( dllexport )
 
@@ -24,6 +25,8 @@ extern "C"
 	void DLLEXPORT HUD_DrawNormalTriangles( void );
 	void DLLEXPORT HUD_DrawTransparentTriangles( void );
 };
+
+extern ParticleSystemManager* g_pParticleSystems; // LRC
 
 //#define TEST_IT
 #if defined( TEST_IT )
@@ -121,4 +124,12 @@ void DLLEXPORT HUD_DrawTransparentTriangles( void )
 #if defined( TEST_IT )
 //	Draw_Triangles();
 #endif
+
+	// LRC: find out the time elapsed since the last redraw
+	static float fOldTime, fTime;
+	fOldTime = fTime;
+	fTime = gEngfuncs.GetClientTime();
+
+	// LRC: draw and update particle systems
+	g_pParticleSystems->UpdateSystems(fTime - fOldTime);
 }

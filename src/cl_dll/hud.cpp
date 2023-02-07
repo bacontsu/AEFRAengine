@@ -367,6 +367,7 @@ void CHud :: Init( void )
 	m_AmmoSecondary.Init();
 	m_TextMessage.Init();
 	m_StatusIcons.Init();
+	m_Particle.Init(); // (LRC) -- 30/08/02 November235: Particles to Order
 
 	GetClientVoiceMgr()->Init(&g_VoiceStatusHelper, (vgui::Panel**)&gViewPort);
 
@@ -540,6 +541,7 @@ void CHud :: VidInit( void )
 	m_AmmoSecondary.VidInit();
 	m_TextMessage.VidInit();
 	m_StatusIcons.VidInit();
+	m_Particle.VidInit(); // (LRC) -- 30/08/02 November235: Particles to Order
 
 	GetClientVoiceMgr()->VidInit();
 }

@@ -76,7 +76,19 @@ extern void SaveGlobalState( SAVERESTOREDATA *pSaveData );
 extern void RestoreGlobalState( SAVERESTOREDATA *pSaveData );
 extern void ResetGlobalState( void );
 
-typedef enum { USE_OFF = 0, USE_ON = 1, USE_SET = 2, USE_TOGGLE = 3 } USE_TYPE;
+//LRC- added USE_SAME, USE_NOT, and USE_KILL
+typedef enum
+{
+	USE_OFF = 0,
+	USE_ON = 1,
+	USE_SET = 2,
+	USE_TOGGLE = 3,
+	USE_KILL = 4,
+	USE_SPAWN = 7, //AJH
+	// special signals, never actually get sent:
+	USE_SAME = 5,
+	USE_NOT = 6,
+} USE_TYPE;
 
 extern void FireTargets( const char *targetName, CBaseEntity *pActivator, CBaseEntity *pCaller, USE_TYPE useType, float value );
 
