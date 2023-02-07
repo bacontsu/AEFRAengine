@@ -38,13 +38,13 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\..\..\..\SCARED\SCARED\bin</OutDir>
+    <OutDir>D:\SCARED\SCARED\bin</OutDir>
     <IntDir>$(SolutionDir)build\$(TargetName)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <IgnoreImportLibrary>true</IgnoreImportLibrary>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\..\..\..\SCARED\valve\bin</OutDir>
+    <OutDir>D:\SCARED\SCARED\bin</OutDir>
     <IntDir>$(SolutionDir)build\$(TargetName)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <IgnoreImportLibrary>true</IgnoreImportLibrary>

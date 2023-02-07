@@ -26,7 +26,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\..\..\..\SCARED</OutDir>
+    <OutDir>D:\SCARED</OutDir>
     <IntDir>$(SolutionDir)build\$(TargetName)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
