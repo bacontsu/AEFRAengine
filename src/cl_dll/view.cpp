@@ -508,6 +508,11 @@ typedef struct
 	int CurrentAngle;
 } viewinterp_t;
 
+float lerp(float a, float b, float f)
+{
+	return (a * (1.0 - f)) + (b * f);
+}
+
 /*
 ==================
 V_CalcRefdef
@@ -771,6 +776,31 @@ void V_CalcNormalRefdef(struct ref_params_s* pparams)
 	*/
 
 //	view->angles = view->angles + Vector(CVAR_GET_FLOAT("cl_Angx"), CVAR_GET_FLOAT("cl_Angy"), CVAR_GET_FLOAT("cl_Angz"));
+
+	// plane thing
+	if (CVAR_GET_FLOAT("plane_index") != 0.0f)
+	{
+		Vector org;
+		org.x = CVAR_GET_FLOAT("plane_org_x");
+		org.y = CVAR_GET_FLOAT("plane_org_y");
+		org.z = CVAR_GET_FLOAT("plane_org_z");
+
+		Vector ang;
+		ang.x = CVAR_GET_FLOAT("plane_ang_x");
+		ang.y = CVAR_GET_FLOAT("plane_ang_y");
+		ang.z = 0;
+
+		Vector forward, up, right;
+		AngleVectors(ang, forward, right, up);
+		Vector targetOrg = org - forward * 800 + up * 100;
+
+		static Vector wantOrg;
+		for(int i = 0; i < 3; i++)
+			wantOrg[i] = lerp(wantOrg[i], targetOrg[i], gHUD.m_flTimeDelta * 5);
+		pparams->vieworg = wantOrg;
+		pparams->viewangles = ang;
+		pparams->viewangles[ROLL] = gHUD.lagangle_x * 2.0f;
+	}
 
 	VectorCopy(view->angles, view->curstate.angles);
 

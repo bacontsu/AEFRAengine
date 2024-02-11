@@ -384,6 +384,13 @@ void IN_MouseMove(float frametime, usercmd_t* cmd)
 		gHUD.mouse_x = mouse_x;
 		gHUD.mouse_y = mouse_y;
 
+		char cmd[512];
+		sprintf(cmd, "input_x_plane %i\n", mouse_x);
+		gEngfuncs.pfnClientCmd(cmd);
+
+		sprintf(cmd, "input_y_plane %i\n", mouse_y);
+		gEngfuncs.pfnClientCmd(cmd);
+
 		// if the mouse has moved, force it to the center, so there's room to move
 		if (mx || my)
 		{

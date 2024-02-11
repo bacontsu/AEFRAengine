@@ -1107,6 +1107,11 @@ int CStudioModelRenderer::StudioDrawModel( int flags )
 		m_pCurrentEntity->curstate.body = gHUD.curWepClip;
 	}
 
+	if (m_pCurrentEntity->index == (int)CVAR_GET_FLOAT("plane_index"))
+	{
+		m_pCurrentEntity->angles[ROLL] = gHUD.lagangle_x * 10.0f;
+	}
+
 	if (m_pCurrentEntity->curstate.renderfx == kRenderFxDeadPlayer)
 	{
 		entity_state_t deadplayer;

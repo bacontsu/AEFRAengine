@@ -2375,4 +2375,6 @@ void CParticle::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useT
 			//ALERT(at_console, "Toggling Particle on/off %d\n", pev->body);
 		}
 	}
+// up / down
+// xashfox plane
 }

@@ -326,6 +326,20 @@ void CHud :: Init( void )
 	CVAR_CREATE("cl_Angy", 0, FCVAR_ARCHIVE);
 	CVAR_CREATE("cl_Angz", 0, FCVAR_ARCHIVE);
 
+	// shared cvar
+	CVAR_CREATE("input_x_plane", 0, FCVAR_ARCHIVE);
+	CVAR_CREATE("input_y_plane", 0, FCVAR_ARCHIVE);
+
+	CVAR_CREATE("plane_org_x", 0, FCVAR_ARCHIVE);
+	CVAR_CREATE("plane_org_y", 0, FCVAR_ARCHIVE);
+	CVAR_CREATE("plane_org_z", 0, FCVAR_ARCHIVE);
+
+	CVAR_CREATE("plane_ang_x", 0, FCVAR_ARCHIVE);
+	CVAR_CREATE("plane_ang_y", 0, FCVAR_ARCHIVE);
+	CVAR_CREATE("plane_ang_z", 0, FCVAR_ARCHIVE);
+
+	CVAR_CREATE("plane_index", 0, FCVAR_ARCHIVE);
+
 	m_iLogo = 0;
 	m_iFOV = 0;
 
