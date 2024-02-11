@@ -2376,5 +2376,84 @@ void CParticle::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useT
 		}
 	}
 // up / down
+#define	PITCH	0
+// left / right
+#define	YAW		1
+// fall over
+#define	ROLL	2 
+
+
 // xashfox plane
+class CBasePlane : public CBaseEntity
+{
+public:
+	void Spawn();
+	void Precache();
+	void EXPORT Think();
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value);
+	virtual int	ObjectCaps(void) { return (CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION) | FCAP_IMPULSE_USE; }
+	
+	float lerpedRoll;
+	BOOL m_bEnabled;
+	EHANDLE m_pOwner;
+};
+LINK_ENTITY_TO_CLASS(vehicle_plane, CBasePlane);
+
+void CBasePlane::Spawn()
+{
+	Precache();
+	SET_MODEL(ENT(pev), "models/demoplane.mdl");
+	UTIL_SetSize(pev, Vector(-20, -20, -20), Vector(20, 20, 20));
+	pev->movetype = MOVETYPE_FLY;
+	pev->solid = SOLID_BBOX;
+
+	pev->nextthink = gpGlobals->time + 0.01f;
+}
+
+void CBasePlane::Precache()
+{
+	PRECACHE_MODEL("models/demoplane.mdl");
+}
+
+void CBasePlane::Think()
+{
+	ALERT(at_console, "test %f %f\n", CVAR_GET_FLOAT("input_x_plane"), CVAR_GET_FLOAT("input_y_plane"));
+
+	if ((bool)(int)m_bEnabled)
+	{
+		pev->angles[YAW] -= CVAR_GET_FLOAT("input_x_plane") * 0.01f;
+		pev->angles[PITCH] -= CVAR_GET_FLOAT("input_y_plane") * 0.01f;
+
+		//lerpedRoll = UTIL_Approach(lerpedRoll, CVAR_GET_FLOAT("input_x_plane") * 0.5f, gpGlobals->frametime);
+		//pev->angles[ROLL] = lerpedRoll;
+
+		CVAR_SET_FLOAT("plane_org_x", pev->origin.x);
+		CVAR_SET_FLOAT("plane_org_y", pev->origin.y);
+		CVAR_SET_FLOAT("plane_org_z", pev->origin.z);
+
+		CVAR_SET_FLOAT("plane_ang_x", -pev->angles.x);
+		CVAR_SET_FLOAT("plane_ang_y", pev->angles.y);
+		CVAR_SET_FLOAT("plane_ang_z", pev->angles.z);
+
+		CVAR_SET_FLOAT("plane_index", (float)this->entindex());
+
+		UTIL_MakeVectors(pev->angles);
+
+		auto forward = gpGlobals->v_forward;
+		forward.z = -forward.z;
+		pev->velocity = forward * 1500;
+	}
+	else
+	{
+		CVAR_SET_FLOAT("plane_index", 0.0f);
+	}
+
+
+	pev->nextthink = gpGlobals->time + 0.0001f;
+}
+
+void CBasePlane::Use(CBaseEntity* pActivator, CBaseEntity* pCaller, USE_TYPE useType, float value)
+{
+	m_bEnabled = (BOOL)!(bool)(int)m_bEnabled;
+	m_pOwner = pActivator;
 }
